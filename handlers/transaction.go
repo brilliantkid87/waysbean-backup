@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 	dto "waysbean/dto/result"
@@ -13,6 +14,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
+	"github.com/midtrans/midtrans-go"
+	"github.com/midtrans/midtrans-go/snap"
 )
 
 type handlerTransaction struct {
@@ -76,35 +79,35 @@ func (h *handlerTransaction) CreateTransaction(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{
-		Code: http.StatusOK,
-		Data: data,
-	})
+	// return c.JSON(http.StatusOK, dto.SuccessResult{
+	// 	Code: http.StatusOK,
+	// 	Data: data,
+	// })
 
 	// 1. Initiate Snap client
-	// var s = snap.Client{}
-	// s.New(os.Getenv("SERVER_KEY"), midtrans.Sandbox)
-	// // Use to midtrans.Production if you want Production Environment (accept real transaction).
+	var s = snap.Client{}
+	s.New(os.Getenv("SERVER_KEY"), midtrans.Sandbox)
+	// Use to midtrans.Production if you want Production Environment (accept real transaction).
 
-	// // 2. Initiate Snap request param
-	// req := &snap.Request{
-	// 	TransactionDetails: midtrans.TransactionDetails{
-	// 		OrderID:  strconv.Itoa(data.ID),
-	// 		GrossAmt: int64(data.SubTotal),
-	// 	},
-	// 	CreditCard: &snap.CreditCardDetails{
-	// 		Secure: true,
-	// 	},
-	// 	CustomerDetail: &midtrans.CustomerDetails{
-	// 		FName: data.User.Name,
-	// 		Email: data.User.Email,
-	// 	},
-	// }
+	// 2. Initiate Snap request param
+	req := &snap.Request{
+		TransactionDetails: midtrans.TransactionDetails{
+			OrderID:  strconv.Itoa(data.ID),
+			GrossAmt: 1000,
+		},
+		CreditCard: &snap.CreditCardDetails{
+			Secure: true,
+		},
+		CustomerDetail: &midtrans.CustomerDetails{
+			FName: data.User.Name,
+			Email: data.User.Email,
+		},
+	}
 
-	// // 3. Execute request create Snap transaction to Midtrans Snap API
-	// snapResp, _ := s.CreateTransaction(req)
+	// 3. Execute request create Snap transaction to Midtrans Snap API
+	snapResp, _ := s.CreateTransaction(req)
 
-	// return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: snapResp})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: snapResp})
 
 }
 
