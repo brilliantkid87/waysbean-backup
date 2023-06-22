@@ -69,7 +69,7 @@ func (h *handlerTransaction) CreateTransaction(c echo.Context) error {
 		Address:  request.Address,
 		Phone:    request.Phone,
 		PostCode: request.PostCode,
-		Status:   request.Status,
+		Status:   "waiting",
 		TotalQty: request.TotalQty,
 		SubTotal: request.SubTotal,
 	}

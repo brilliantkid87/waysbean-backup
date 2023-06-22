@@ -10,6 +10,7 @@ type User struct {
 	Role        string          `json:"role" gorm:"type: varchar(255)"`
 	Profile     ProfileResponse `json:"profiles"`
 	Transaction []Transaction   `json:"transaction"`
+	Cart        []Cart          `json:"carts"`
 	CreatedAt   time.Time       `json:"-"`
 	UpdatedAt   time.Time       `json:"-"`
 }

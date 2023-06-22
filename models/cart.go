@@ -5,6 +5,7 @@ import "time"
 type Cart struct {
 	ID            int             `json:"id" gorm:"primary_key:auto_increment"`
 	UserID        int             `json:"user_id"`
+	User          UserResponse    `json:"-" gorm:"foreignKey:UserID"`
 	TransactionID int             `json:"transaction_id" gorm:"type: int" form:"transaction_id constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Transaction   Transaction     `json:"-" gorm:"foreignKey:TransactionID"`
 	ProductID     int             `json:"product_id" gorm:"type: int" form:"product_id"`

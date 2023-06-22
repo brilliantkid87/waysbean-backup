@@ -5,7 +5,7 @@ import "time"
 type Transaction struct {
 	ID        int          `json:"id"`
 	UserID    int          `json:"user_id" gorm:"type: int" form:"user_id"`
-	User      UserResponse `json:"users" gorm:"foreignKey:UserID"`
+	User      UserResponse `json:"-" gorm:"foreignKey:UserID"`
 	Name      string       `json:"name" gorm:"type: varchar(255)" form:"name"`
 	Email     string       `json:"email" gorm:"type: varchar(255)" form:"email"`
 	Phone     string       `json:"phone" gorm:"type: varchar(255)" form:"phone"`
